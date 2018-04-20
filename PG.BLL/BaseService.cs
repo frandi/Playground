@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PG.Common;
-using PG.Model;
+﻿using PG.Model;
 using PG.Repository;
+using System;
 
 namespace PG.BLL
 {
@@ -22,6 +17,7 @@ namespace PG.BLL
 
         public int Create(TEntity newItem)
         {
+            newItem.Created = DateTime.UtcNow;
             return Repo.Create(newItem);
         }
 
@@ -37,6 +33,7 @@ namespace PG.BLL
 
         public void Update(TEntity item)
         {
+            item.Updated = DateTime.UtcNow;
             Repo.Update(item);
         }
     }

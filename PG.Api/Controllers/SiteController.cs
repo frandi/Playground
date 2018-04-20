@@ -36,23 +36,26 @@ namespace PG.Api.Controllers
         }
         
         [Route("")]
-        public IHttpActionResult Post([FromBody]SiteDto value)
+        public IHttpActionResult Post([FromBody]NewSiteDto value)
         {
             var site = value.ToSite();
             var id = _siteService.Create(site);
             
-            return CreatedAtRoute("GetById", new {id}, site);
+            return CreatedAtRoute("GetById", new {id}, new SiteDto(site));
         }
         
         [Route("{id}")]
-        public IHttpActionResult Put(int id, [FromBody]SiteDto value)
+        public IHttpActionResult Put(int id, [FromBody]EditSiteDto value)
         {
             if (id != value.Id)
                 return BadRequest();
 
-            _siteService.Update(value.ToSite());
+            var originalValue = _siteService.GetById(id);
+            var site = value.ToSite(originalValue);
 
-            return Ok(value);
+            _siteService.Update(site);
+
+            return Ok(new SiteDto(site));
         }
         
         [Route("{id}")]

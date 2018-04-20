@@ -21,8 +21,6 @@ namespace PG.Repository
 
         public int Create(T newItem)
         {
-            newItem.Created = DateTime.UtcNow;
-
             var entity = GetEntity(newItem);
             entity.State = EntityState.Added;
             
@@ -33,7 +31,7 @@ namespace PG.Repository
 
         public void Delete(int id)
         {
-            T item = Db.Set<T>().Find(id);
+            T item = Get(id);
             if (item != null)
             {
                 Db.Entry(item).State = EntityState.Deleted;
@@ -56,10 +54,9 @@ namespace PG.Repository
 
         public void Update(T item)
         {
-            item.Updated = DateTime.UtcNow;
-
             var entity = GetEntity(item);
             entity.State = EntityState.Modified;
+
             Db.SaveChanges();
         }
 

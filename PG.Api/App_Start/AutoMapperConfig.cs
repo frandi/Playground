@@ -10,6 +10,8 @@ namespace PG.Api
         {
             Mapper.Initialize(config =>
             {
+                config.CreateMap<NewSiteDto, Site>();
+                config.CreateMap<EditSiteDto, Site>();
                 config.CreateMap<SiteDto, Site>().ReverseMap();
             });
         }
