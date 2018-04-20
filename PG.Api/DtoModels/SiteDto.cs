@@ -1,8 +1,5 @@
-﻿using PG.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using AutoMapper;
+using PG.Model;
 
 namespace PG.Api.DtoModels
 {
@@ -15,7 +12,8 @@ namespace PG.Api.DtoModels
 
         public SiteDto(Site site)
         {
-
+            Id = site.Id;
+            Name = site.Name;
         }
 
         public int Id { get; set; }
@@ -23,7 +21,7 @@ namespace PG.Api.DtoModels
 
         public Site ToSite()
         {
-            return new Site();
+            return Mapper.Map<SiteDto, Site>(this);
         }
     }
 }

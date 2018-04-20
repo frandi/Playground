@@ -1,47 +1,66 @@
-﻿using PG.BLL;
-using System;
-using System.Collections.Generic;
+﻿using PG.Api.DtoModels;
+using PG.BLL;
+using PG.Common;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace PG.Api.Controllers
 {
+    [RoutePrefix("Site")]
     public class SiteController : ApiController
     {
-        private ISiteService _siteService;
+        private readonly ISiteService _siteService;
 
         public SiteController(ISiteService siteService)
         {
             _siteService = siteService;
         }
 
-        // GET api/<controller>
-        public IEnumerable<string> Get()
+        [Route("n/{name}", Name = "GetByName")]
+        public IHttpActionResult Get(string name)
         {
-            return new string[] { "value1", "value2" };
+            var list = _siteService.GetByName(name);
+
+            return Json(new PagedList<SiteDto>(list.Select(i => new SiteDto(i)), list.PageIndex, list.PageSize, list.TotalCount));
         }
 
-        // GET api/<controller>/5
-        public string Get(int id)
+        [Route("{id}", Name = "GetById")]
+        public IHttpActionResult Get(int id)
         {
-            return "value";
-        }
+            var item = _siteService.GetById(id);
+            if (item == null)
+                return NotFound();
 
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
+            return Ok(new SiteDto(item));
         }
-
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
+        
+        [Route("")]
+        public IHttpActionResult Post([FromBody]SiteDto value)
         {
+            var site = value.ToSite();
+            var id = _siteService.Create(site);
+            
+            return CreatedAtRoute("GetById", new {id}, site);
         }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
+        
+        [Route("{id}")]
+        public IHttpActionResult Put(int id, [FromBody]SiteDto value)
         {
+            if (id != value.Id)
+                return BadRequest();
+
+            _siteService.Update(value.ToSite());
+
+            return Ok(value);
+        }
+        
+        [Route("{id}")]
+        public IHttpActionResult Delete(int id)
+        {
+            _siteService.Delete(id);
+
+            return StatusCode(HttpStatusCode.NoContent);
         }
     }
 }

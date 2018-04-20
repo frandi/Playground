@@ -48,6 +48,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IPlaygroundDbContext.cs" />
+    <Compile Include="Migrations\201804191234238_InitMigration.cs" />
+    <Compile Include="Migrations\201804191234238_InitMigration.Designer.cs">
+      <DependentUpon>201804191234238_InitMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="PlaygroundDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -60,6 +65,11 @@
       <Project>{540e378a-e9c6-44ea-bd5a-038fa6b3376e}</Project>
       <Name>PG.Model</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201804191234238_InitMigration.resx">
+      <DependentUpon>201804191234238_InitMigration.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

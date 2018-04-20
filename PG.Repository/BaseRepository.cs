@@ -3,13 +3,10 @@ using PG.Common.Extensions;
 using PG.DataAccess;
 using PG.Model;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PG.Repository
 {
@@ -17,15 +14,18 @@ namespace PG.Repository
     {
         protected IPlaygroundDbContext Db;
 
-        public BaseRepository(IPlaygroundDbContext dbContext)
+        protected BaseRepository(IPlaygroundDbContext dbContext)
         {
             Db = dbContext;
         }
 
         public int Create(T newItem)
         {
-            DbEntityEntry<T> entity = GetEntity(newItem);
+            newItem.Created = DateTime.UtcNow;
+
+            var entity = GetEntity(newItem);
             entity.State = EntityState.Added;
+            
             Db.SaveChanges();
 
             return newItem.Id;
@@ -36,7 +36,7 @@ namespace PG.Repository
             T item = Db.Set<T>().Find(id);
             if (item != null)
             {
-                Db.Entry<T>(item).State = EntityState.Deleted;
+                Db.Entry(item).State = EntityState.Deleted;
                 Db.SaveChanges();
             }
         }
@@ -46,7 +46,7 @@ namespace PG.Repository
             var entities = Db.Set<T>();
             var query = predicate != null ? entities.Where(predicate) : entities;
 
-            return query.ToPagedList<T>(pageIndex, pageSize);
+            return query.OrderBy(q => q.Id).ToPagedList(pageIndex, pageSize);
         }
 
         public T Get(int id)
@@ -56,14 +56,16 @@ namespace PG.Repository
 
         public void Update(T item)
         {
-            DbEntityEntry<T> entity = GetEntity(item);
+            item.Updated = DateTime.UtcNow;
+
+            var entity = GetEntity(item);
             entity.State = EntityState.Modified;
             Db.SaveChanges();
         }
 
         private DbEntityEntry<T> GetEntity(T newItem)
         {
-            var entity = Db.Entry<T>(newItem);
+            var entity = Db.Entry(newItem);
             if (entity.State == EntityState.Detached)
                 Db.Set<T>().Attach(newItem);
             return entity;
