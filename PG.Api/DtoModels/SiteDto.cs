@@ -3,46 +3,41 @@ using PG.Model;
 
 namespace PG.Api.DtoModels
 {
-    public class NewSiteDto
+    public class NewSiteDto : BaseNewDto<Site>
     {
         public string Name { get; set; }
 
-        public virtual Site ToSite()
+        public override Site ToEntity()
         {
             return Mapper.Map<NewSiteDto, Site>(this);
         }
     }
 
-    public class EditSiteDto : NewSiteDto
+    public class EditSiteDto : BaseDto<Site>
     {
-        public int Id { get; set; }
+        public string Name { get; set; }
 
-        public Site ToSite(Site originaValue)
+        public override Site ToEntity(Site originalEntity)
         {
-            var updatedValue = originaValue;
+            var updatedEntity = originalEntity;
 
-            Mapper.Map(this, updatedValue);
+            Mapper.Map(this, updatedEntity);
 
-            return updatedValue;
+            return updatedEntity;
         }
     }
 
     public class SiteDto : EditSiteDto
     {
-        public SiteDto()
-        {
-
-        }
-
-        public SiteDto(Site site)
-        {
-            Id = site.Id;
-            Name = site.Name;
-        }
-        
-        public override Site ToSite()
+        public override Site ToEntity()
         {
             return Mapper.Map<SiteDto, Site>(this);
+        }
+
+        public override void LoadFromEntity(Site entity)
+        {
+            Id = entity.Id;
+            Name = entity.Name;
         }
     }
 }

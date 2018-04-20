@@ -15,10 +15,10 @@ namespace PG.BLL
             Repo = repository;
         }
 
-        public int Create(TEntity newItem)
+        public int Create(TEntity newEntity)
         {
-            newItem.Created = DateTime.UtcNow;
-            return Repo.Create(newItem);
+            newEntity.Created = DateTime.UtcNow;
+            return Repo.Create(newEntity);
         }
 
         public void Delete(int id)
@@ -31,10 +31,10 @@ namespace PG.BLL
             return Repo.Get(id);
         }
 
-        public void Update(TEntity item)
+        public void Update(TEntity entity)
         {
-            item.Updated = DateTime.UtcNow;
-            Repo.Update(item);
+            entity.Updated = DateTime.UtcNow;
+            Repo.Update(entity);
         }
     }
 }
