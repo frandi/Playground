@@ -10,7 +10,7 @@ using System.Linq.Expressions;
 
 namespace PG.Repository
 {
-    public abstract class BaseRepository<T> where T: BaseModel
+    public abstract class BaseRepository<TEntity> where TEntity: BaseModel
     {
         protected IPlaygroundDbContext Db;
 
@@ -19,53 +19,53 @@ namespace PG.Repository
             Db = dbContext;
         }
 
-        public int Create(T newItem)
+        public int Create(TEntity newEntity)
         {
-            var entity = GetEntity(newItem);
-            entity.State = EntityState.Added;
+            var dbEntity = GetEntity(newEntity);
+            dbEntity.State = EntityState.Added;
             
             Db.SaveChanges();
 
-            return newItem.Id;
+            return newEntity.Id;
         }
 
         public void Delete(int id)
         {
-            T item = Get(id);
-            if (item != null)
+            TEntity entity = Get(id);
+            if (entity != null)
             {
-                Db.Entry(item).State = EntityState.Deleted;
+                Db.Entry(entity).State = EntityState.Deleted;
                 Db.SaveChanges();
             }
         }
 
-        public PagedList<T> Filter(int pageIndex, int pageSize, Expression<Func<T, bool>> predicate)
+        public PagedList<TEntity> Filter(int pageIndex, int pageSize, Expression<Func<TEntity, bool>> predicate)
         {
-            var entities = Db.Set<T>();
+            var entities = Db.Set<TEntity>();
             var query = predicate != null ? entities.Where(predicate) : entities;
 
             return query.OrderBy(q => q.Id).ToPagedList(pageIndex, pageSize);
         }
 
-        public T Get(int id)
+        public TEntity Get(int id)
         {
-            return Db.Set<T>().Find(id);
+            return Db.Set<TEntity>().Find(id);
         }
 
-        public void Update(T item)
+        public void Update(TEntity updatedEntity)
         {
-            var entity = GetEntity(item);
-            entity.State = EntityState.Modified;
+            var dbEntity = GetEntity(updatedEntity);
+            dbEntity.State = EntityState.Modified;
 
             Db.SaveChanges();
         }
 
-        private DbEntityEntry<T> GetEntity(T newItem)
+        private DbEntityEntry<TEntity> GetEntity(TEntity entity)
         {
-            var entity = Db.Entry(newItem);
-            if (entity.State == EntityState.Detached)
-                Db.Set<T>().Attach(newItem);
-            return entity;
+            var dbEntity = Db.Entry(entity);
+            if (dbEntity.State == EntityState.Detached)
+                Db.Set<TEntity>().Attach(entity);
+            return dbEntity;
         }
     }
 }

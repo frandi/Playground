@@ -5,12 +5,12 @@ using System.Linq.Expressions;
 
 namespace PG.Repository
 {
-    public interface IRepository<T> where T: BaseModel
+    public interface IRepository<TEntity> where TEntity: BaseModel
     {
-        T Get(int id);
-        PagedList<T> Filter(int pageIndex, int pageSize, Expression<Func<T, bool>> predicate);
-        int Create(T newItem);
-        void Update(T item);
+        TEntity Get(int id);
+        PagedList<TEntity> Filter(int pageIndex, int pageSize, Expression<Func<TEntity, bool>> predicate);
+        int Create(TEntity newEntity);
+        void Update(TEntity updatedEntity);
         void Delete(int id);
     }
 }
