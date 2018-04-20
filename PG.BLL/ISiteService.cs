@@ -3,12 +3,8 @@ using PG.Model;
 
 namespace PG.BLL
 {
-    public interface ISiteService
+    public interface ISiteService : IService<Site>
     {
-        Site GetById(int id);
         PagedList<Site> GetByName(string name, int pageIndex = 1, int pageSize = 20);
-        int Create(Site newItem);
-        void Update(Site item);
-        void Delete(int id);
     }
 }
