@@ -45,7 +45,7 @@ namespace PG.Api.Controllers
         {
             var list = Svc.GetByName(name);
 
-            var source = list.Select(i =>
+            var source = list.Items.Select(i =>
             {
                 var item = new SiteDto();
                 item.LoadFromEntity(i);
