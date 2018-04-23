@@ -7,6 +7,7 @@ namespace PG.BLL
     {
         PagedList<Site> GetByName(string name, int pageIndex = 1, int pageSize = 20);
         PagedList<Facility> GetFacilities(int siteId, int pageIndex = 1, int pageSize = 20);
-        void AddFacility(int siteId, Facility newFacility);
+        int AddFacility(int siteId, Facility newFacility);
+        void RemoveFacility(int siteId, int facilityId);
     }
 }

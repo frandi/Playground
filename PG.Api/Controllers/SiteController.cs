@@ -3,6 +3,7 @@ using PG.BLL;
 using PG.Common;
 using PG.Model;
 using System.Linq;
+using System.Net;
 using System.Web.Http;
 
 namespace PG.Api.Controllers
@@ -80,12 +81,20 @@ namespace PG.Api.Controllers
                 return NotFound();
 
             var facility = value.ToEntity();
-            Svc.AddFacility(id, facility);
+            int facilityId = Svc.AddFacility(id, facility);
 
             var createdDto = new FacilityDto();
             createdDto.LoadFromEntity(facility);
 
-            return CreatedAtRoute("GetFacilityById", new {id}, createdDto);
+            return CreatedAtRoute("GetFacilityById", new {facilityId}, createdDto);
+        }
+
+        [Route("{id}/RemoveFacility/{facilityId}"), HttpDelete]
+        public IHttpActionResult RemoveFacility(int id, int facilityId)
+        {
+            Svc.RemoveFacility(id, facilityId);
+
+            return StatusCode(HttpStatusCode.NoContent);
         }
     }
 }

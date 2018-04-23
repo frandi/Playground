@@ -14,16 +14,6 @@ namespace PG.BLL
         {
             _facilityRepository = facilityRepository;
         }
-
-        public void AddFacility(int siteId, Facility newFacility)
-        {
-            newFacility.Created = DateTime.UtcNow;
-            
-            var site = Repo.Get(siteId, s => s.Facilities);
-            site?.Facilities.Add(newFacility);
-
-            Repo.Update(site);
-        }
         
         public PagedList<Site> GetByName(string name, int pageIndex = 1, int pageSize = 20)
         {
@@ -37,6 +27,23 @@ namespace PG.BLL
             return _facilityRepository.Filter(pageIndex, pageSize,
                 new OrderBySelector<Facility, string>(OrderByType.Ascending, facility => facility.Name),
                 facility => facility.SiteId == siteId);
+        }
+
+        public int AddFacility(int siteId, Facility newFacility)
+        {
+            newFacility.SiteId = siteId;
+            newFacility.Created = DateTime.UtcNow;
+
+            return _facilityRepository.Create(newFacility);
+        }
+
+        public void RemoveFacility(int siteId, int facilityId)
+        {
+            var facility = _facilityRepository.Get(facilityId);
+            if (facility != null && facility.SiteId == siteId)
+            {
+                _facilityRepository.Delete(facilityId);
+            }
         }
     }
 }
