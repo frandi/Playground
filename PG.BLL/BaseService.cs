@@ -15,23 +15,23 @@ namespace PG.BLL
             Repo = repository;
         }
 
-        public int Create(TEntity newEntity)
+        public virtual int Create(TEntity newEntity)
         {
             newEntity.Created = DateTime.UtcNow;
             return Repo.Create(newEntity);
         }
 
-        public void Delete(int id)
+        public virtual void Delete(int id)
         {
             Repo.Delete(id);
         }
 
-        public TEntity GetById(int id)
+        public virtual TEntity GetById(int id)
         {
             return Repo.Get(id);
         }
         
-        public void Update(TEntity entity)
+        public virtual void Update(TEntity entity)
         {
             entity.Updated = DateTime.UtcNow;
             Repo.Update(entity);

@@ -19,7 +19,7 @@ namespace PG.Repository
             Db = dbContext;
         }
 
-        public int Create(TEntity newEntity)
+        public virtual int Create(TEntity newEntity)
         {
             var dbEntity = GetEntity(newEntity);
             dbEntity.State = EntityState.Added;
@@ -29,7 +29,7 @@ namespace PG.Repository
             return newEntity.Id;
         }
 
-        public void Delete(int id)
+        public virtual void Delete(int id)
         {
             TEntity entity = Get(id);
             if (entity != null)
@@ -39,7 +39,7 @@ namespace PG.Repository
             }
         }
 
-        public PagedList<TEntity> Filter<TKey>(int pageIndex, int pageSize, OrderBySelector<TEntity, TKey> orderBySelector, Expression<Func<TEntity, bool>> whereFilter, params Expression<Func<TEntity, object>>[] includeProperties)
+        public virtual PagedList<TEntity> Filter<TKey>(int pageIndex, int pageSize, OrderBySelector<TEntity, TKey> orderBySelector, Expression<Func<TEntity, bool>> whereFilter, params Expression<Func<TEntity, object>>[] includeProperties)
         {
             IQueryable<TEntity> entities = Db.Set<TEntity>();
             foreach (var prop in includeProperties)
@@ -56,12 +56,12 @@ namespace PG.Repository
             return query.ToPagedList(pageIndex, pageSize);
         }
 
-        public TEntity Get(int id)
+        public virtual TEntity Get(int id)
         {
             return Db.Set<TEntity>().Find(id);
         }
 
-        public TEntity Get(int id, params Expression<Func<TEntity, object>>[] includeProperties)
+        public virtual TEntity Get(int id, params Expression<Func<TEntity, object>>[] includeProperties)
         {
             var pagedList = Filter(1, 1, 
                 new OrderBySelector<TEntity, int>(OrderByType.Ascending, entity => entity.Id),
@@ -70,7 +70,7 @@ namespace PG.Repository
             return pagedList.TotalCount > 0 ? pagedList.Items.FirstOrDefault() : null;
         }
 
-        public void Update(TEntity updatedEntity)
+        public virtual void Update(TEntity updatedEntity)
         {
             var dbEntity = GetEntity(updatedEntity);
             dbEntity.State = EntityState.Modified;
