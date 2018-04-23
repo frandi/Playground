@@ -23,7 +23,7 @@ namespace PG.Api.DtoModels
         public string Description { get; set; }
         public string[] Images { get; set; }
         public DbGeography Location { get; set; }
-        public int SiteId { get; set; }
+        public SiteDto Site { get; set; }
 
         public override void LoadFromEntity(Facility entity)
         {
@@ -32,7 +32,9 @@ namespace PG.Api.DtoModels
             Name = entity.Name;
             Description = entity.Description;
             Images = entity.Images;
-            SiteId = entity.SiteId;
+
+            if (entity.Site != null)
+                Site = Mapper.Map<Site, SiteDto>(entity.Site);
 
             if (entity.Location != null)
                 Location = DbGeography.FromText(entity.Location.AsText());
