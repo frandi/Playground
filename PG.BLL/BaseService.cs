@@ -30,7 +30,7 @@ namespace PG.BLL
         {
             return Repo.Get(id);
         }
-
+        
         public void Update(TEntity entity)
         {
             entity.Updated = DateTime.UtcNow;

@@ -52,7 +52,12 @@
     <Compile Include="Migrations\201804191234238_InitMigration.Designer.cs">
       <DependentUpon>201804191234238_InitMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804230601355_AddFacility.cs" />
+    <Compile Include="Migrations\201804230601355_AddFacility.Designer.cs">
+      <DependentUpon>201804230601355_AddFacility.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="ModelConfigs\FacilityConfig.cs" />
     <Compile Include="PlaygroundDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -69,6 +74,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201804191234238_InitMigration.resx">
       <DependentUpon>201804191234238_InitMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804230601355_AddFacility.resx">
+      <DependentUpon>201804230601355_AddFacility.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

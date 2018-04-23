@@ -36,7 +36,8 @@ namespace PG.Api.DtoModels
 
         public override void LoadFromEntity(Site entity)
         {
-            Id = entity.Id;
+            base.LoadFromEntity(entity);
+
             Name = entity.Name;
         }
     }

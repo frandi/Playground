@@ -13,11 +13,6 @@ namespace PG.Api.DtoModels
         {
             return new TEntity();
         }
-
-        public virtual void LoadFromEntity(TEntity entity)
-        {
-
-        }
     }
 
     public abstract class BaseDto<TEntity> : BaseNewDto<TEntity>
@@ -28,6 +23,11 @@ namespace PG.Api.DtoModels
         public virtual TEntity ToEntity(TEntity originalEntity)
         {
             return originalEntity;
+        }
+
+        public virtual void LoadFromEntity(TEntity entity)
+        {
+            Id = entity.Id;
         }
     }
 }

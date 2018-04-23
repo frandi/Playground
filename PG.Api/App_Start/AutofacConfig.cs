@@ -24,13 +24,15 @@ namespace PG.Api
 
         private static IContainer RegisterServices(ContainerBuilder builder)
         {
-            builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
-
             builder.RegisterInstance(new PlaygroundDbContext()).As<IPlaygroundDbContext>();
 
+            builder.RegisterType<FacilityRepository>().As<IFacilityRepository>().InstancePerRequest();
             builder.RegisterType<SiteRepository>().As<ISiteRepository>().InstancePerRequest();
 
+            builder.RegisterType<FacilityService>().As<IFacilityService>().InstancePerRequest();
             builder.RegisterType<SiteService>().As<ISiteService>().InstancePerRequest();
+
+            builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
             Container = builder.Build();
 

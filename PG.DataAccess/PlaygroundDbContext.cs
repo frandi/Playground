@@ -1,4 +1,5 @@
-﻿using PG.Model;
+﻿using PG.DataAccess.ModelConfigs;
+using PG.Model;
 using System.Data.Entity;
 
 namespace PG.DataAccess
@@ -17,6 +18,10 @@ namespace PG.DataAccess
         }
 
         public DbSet<Site> Sites { get; set; }
-        
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            FacilityConfig.Configure(modelBuilder);
+        }
     }
 }

@@ -39,17 +39,35 @@ namespace PG.Repository
             }
         }
 
-        public PagedList<TEntity> Filter(int pageIndex, int pageSize, Expression<Func<TEntity, bool>> predicate)
+        public PagedList<TEntity> Filter<TKey>(int pageIndex, int pageSize, OrderBySelector<TEntity, TKey> orderBySelector, Expression<Func<TEntity, bool>> whereFilter, params Expression<Func<TEntity, object>>[] includeProperties)
         {
-            var entities = Db.Set<TEntity>();
-            var query = predicate != null ? entities.Where(predicate) : entities;
+            IQueryable<TEntity> entities = Db.Set<TEntity>();
+            foreach (var prop in includeProperties)
+            {
+                entities = entities.Include(prop);
+            }
 
-            return query.OrderBy(q => q.Id).ToPagedList(pageIndex, pageSize);
+            entities = orderBySelector.Type == OrderByType.Ascending
+                ? entities.OrderBy(orderBySelector.Selector)
+                : entities.OrderByDescending(orderBySelector.Selector);
+
+            var query = whereFilter != null ? entities.Where(whereFilter) : entities;
+
+            return query.ToPagedList(pageIndex, pageSize);
         }
 
         public TEntity Get(int id)
         {
             return Db.Set<TEntity>().Find(id);
+        }
+
+        public TEntity Get(int id, params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            var pagedList = Filter(1, 1, 
+                new OrderBySelector<TEntity, int>(OrderByType.Ascending, entity => entity.Id),
+                entity => entity.Id == id, includeProperties);
+
+            return pagedList.TotalCount > 0 ? pagedList.Items.FirstOrDefault() : null;
         }
 
         public void Update(TEntity updatedEntity)
