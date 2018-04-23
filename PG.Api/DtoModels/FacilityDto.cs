@@ -10,11 +10,6 @@ namespace PG.Api.DtoModels
         public string Description { get; set; }
         public string[] Images { get; set; }
         public DbGeography Location { get; set; }
-
-        public override Facility ToEntity()
-        {
-            return Mapper.Map<NewFacilityDto, Facility>(this);
-        }
     }
 
     public class EditFacilityDto : BaseDto<Facility>
@@ -23,26 +18,12 @@ namespace PG.Api.DtoModels
         public string Description { get; set; }
         public string[] Images { get; set; }
         public DbGeography Location { get; set; }
-
-        public override Facility ToEntity(Facility originalEntity)
-        {
-            var updatedEntity = originalEntity;
-
-            Mapper.Map(this, updatedEntity);
-
-            return updatedEntity;
-        }
     }
 
     public class FacilityDto : EditFacilityDto
     {
         public SiteDto Site { get; set; }
-
-        public override Facility ToEntity()
-        {
-            return Mapper.Map<FacilityDto, Facility>(this);
-        }
-
+        
         public override void LoadFromEntity(Facility entity)
         {
             base.LoadFromEntity(entity);
