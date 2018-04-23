@@ -17,13 +17,31 @@ namespace PG.Api.DtoModels
         }
     }
 
-    public class FacilityDto : BaseDto<Facility>
+    public class EditFacilityDto : BaseDto<Facility>
     {
         public string Name { get; set; }
         public string Description { get; set; }
         public string[] Images { get; set; }
         public DbGeography Location { get; set; }
+
+        public override Facility ToEntity(Facility originalEntity)
+        {
+            var updatedEntity = originalEntity;
+
+            Mapper.Map(this, updatedEntity);
+
+            return updatedEntity;
+        }
+    }
+
+    public class FacilityDto : EditFacilityDto
+    {
         public SiteDto Site { get; set; }
+
+        public override Facility ToEntity()
+        {
+            return Mapper.Map<FacilityDto, Facility>(this);
+        }
 
         public override void LoadFromEntity(Facility entity)
         {
